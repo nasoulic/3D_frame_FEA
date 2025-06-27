@@ -1,4 +1,5 @@
 from structure import Structure
+from beamElement import BeamElement
 import numpy as np
 from visualise_structure import visualize_structure
 from evaluate_stress import calculate_stress
@@ -7,6 +8,7 @@ from visualise_stress import plot_stress_distribution
 from visualize_forces import plot_bending_shear_diagrams
 from animate_deformation import animate_deformation
 
+# Fork Cross-Section
 E = 210e3  # MPa (Young's modulus)
 G = 81.2e3  # MPa (Shear modulus)
 b = 50 # mm
@@ -15,7 +17,8 @@ t = 3 # mm
 A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
-J = Iy + Iz # m4
+
+fork_beam = BeamElement(E, G, A, Iy, Iz)
 
 # Create structure
 agv_fork_structure = Structure()
@@ -33,16 +36,16 @@ n9 = agv_fork_structure.add_node(-55, 510.69, 143)
 n10 = agv_fork_structure.add_node(0, 565.69, 143)
 
 # Add beam
-agv_fork_structure.add_beam(n1, n2, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n2, n3, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n3, n4, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n4, n5, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n6, n7, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n7, n8, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n8, n9, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n9, n10, E, G, A, Iy, Iz, J)
-# agv_fork_structure.add_beam(n8, n3, E, G, A, Iy, Iz, J)
-agv_fork_structure.add_beam(n5, n10, E, G, A, Iy, Iz, J)
+agv_fork_structure.add_beam(n1, n2, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n2, n3, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n3, n4, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n4, n5, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n6, n7, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n7, n8, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n8, n9, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n9, n10, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+# agv_fork_structure.add_beam(n8, n3, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n5, n10, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
 
 # Add spring
 k_spring = 6 # N/mm
