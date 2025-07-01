@@ -204,9 +204,9 @@ agv_frame.add_spring(n44, n46, spring_vector)
 agv_frame.add_spring(n47, n49, spring_vector)
 agv_frame.add_spring(n51, n53, spring_vector)
 
-# Apply constraints for skid steering
-agv_frame.add_support(n1.id, [0, 1]) # Constrain xy
-agv_frame.add_support(n6.id, [0, 1]) # Constrain xy
+# Apply constraints for assymetric bump
+agv_frame.add_support(n1.id, [0]) # Constrain x
+agv_frame.add_support(n6.id, [0]) # Constrain x
 agv_frame.add_support(n23.id, [0, 1, 2]) # Constrain xyz
 agv_frame.add_support(n27.id, [0, 1, 2]) # Constrain xyz
 agv_frame.add_support(n39.id, [1, 2]) # Constrain yz
@@ -214,16 +214,9 @@ agv_frame.add_support(n43.id, [1, 2]) # Constrain yz
 agv_frame.add_support(n50.id, [1]) # Constrain y
 agv_frame.add_support(n54.id, [1]) # Constrain y
 
-
 # Apply loadcases
-agv_frame.add_load(n1.id, [230, 0, 644, 0, 0, 0]) # Front Left Wheel
-agv_frame.add_load(n6.id, [230, 0, 644, 0, 0, 0]) # Front Left Wheel
-agv_frame.add_load(n39.id, [-230, 0, 243, 0, 0, 0]) # Front Right Wheel
-agv_frame.add_load(n43.id, [-230, 0, 243, 0, 0, 0]) # Front Right Wheel
-agv_frame.add_load(n23.id, [230, 0, -861, 0, 0, 0]) # Rear Left Wheel
-agv_frame.add_load(n27.id, [230, 0, -861, 0, 0, 0]) # Rear Left Wheel
-agv_frame.add_load(n50.id, [-230, 0, -460, 0, 0, 0]) # Rear Right Wheel
-agv_frame.add_load(n54.id, [-230, 0, -460, 0, 0, 0]) # Rear Right Wheel
+agv_frame.add_load(n1.id, [0, 2000, 0, 0, 0, 0]) # Front Left Wheel
+agv_frame.add_load(n6.id, [0, 2000, 0, 0, 0, 0]) # Front Left Wheel
 
 # Visualise frame
 # visualize_structure(agv_frame)
@@ -232,16 +225,16 @@ agv_frame.add_load(n54.id, [-230, 0, -460, 0, 0, 0]) # Rear Right Wheel
 U = agv_frame.solve()
 
 # Write result files
-export_nodal_displacements(agv_frame, U, "nodal_displacement_skid_steering.dat")
-calculate_stress(agv_frame, U, "stresses_output_skid_steering.dat")
+export_nodal_displacements(agv_frame, U, "nodal_displacement_vertical_bump.dat")
+calculate_stress(agv_frame, U, "stresses_output_vertical_bump.dat")
 
 # Visualise results
-visualize_structure(agv_frame, U, scale = 10)
+visualize_structure(agv_frame, U, scale = 1)
 
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_z", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "tau_torsion", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_total", filename = "stress_skid_steering.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_vertical_bump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_vertical_bump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_z", filename = "stress_vertical_bump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "tau_torsion", filename = "stress_vertical_bump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_total", filename = "stress_vertical_bump.png")
 
 plt.show()

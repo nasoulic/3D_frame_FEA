@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d.art3d import Line3DCollection
 import matplotlib.cm as cm
 import matplotlib.colors as colors
 
-def plot_stress_distribution(structure, U, stress_component='axial', scale=1.0):
+def plot_stress_distribution(structure, U, stress_component='axial', scale=1.0, filename="stress.png"):
     """
     Visualizes stress distribution on the structure elements using color mapping.
 
@@ -14,6 +14,7 @@ def plot_stress_distribution(structure, U, stress_component='axial', scale=1.0):
     - h, b: cross-section dimensions
     - stress_component: which stress to visualize, e.g. 'axial', 'bending_y', 'bending_z', 'torsion'
     - scale: scale factor for deformation visualization (optional)
+    - filename: save figure under the given file name (optional)
     """
 
     # Collect lines and stress magnitudes for coloring
@@ -90,4 +91,4 @@ def plot_stress_distribution(structure, U, stress_component='axial', scale=1.0):
     cbar.set_label('Stress (MPa)')
 
     plt.tight_layout()
-    plt.show()
+    plt.savefig("{0}_{1}".format(stress_component, filename))

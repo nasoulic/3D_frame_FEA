@@ -99,4 +99,4 @@ def visualize_structure(structure, displacements=None, show_forces=True, show_su
     ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
 
     plt.tight_layout()
-    plt.show()
+
