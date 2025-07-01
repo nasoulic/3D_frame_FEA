@@ -18,7 +18,7 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-fork_beam = BeamProperties(E, G, A, Iy, Iz)
+fork_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
 
 # Create structure
 agv_fork_structure = Structure()
@@ -36,16 +36,16 @@ n9 = agv_fork_structure.add_node(-55, 510.69, 143)
 n10 = agv_fork_structure.add_node(0, 565.69, 143)
 
 # Add beam
-agv_fork_structure.add_beam(n1, n2, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n2, n3, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n3, n4, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n4, n5, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n6, n7, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n7, n8, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n8, n9, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n9, n10, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-# agv_fork_structure.add_beam(n8, n3, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
-agv_fork_structure.add_beam(n5, n10, fork_beam.E, fork_beam.G, fork_beam.A, fork_beam.Iy, fork_beam.Iz, fork_beam.J)
+agv_fork_structure.add_beam(n1, n2, fork_beam)
+agv_fork_structure.add_beam(n2, n3, fork_beam)
+agv_fork_structure.add_beam(n3, n4, fork_beam)
+agv_fork_structure.add_beam(n4, n5, fork_beam)
+agv_fork_structure.add_beam(n6, n7, fork_beam)
+agv_fork_structure.add_beam(n7, n8, fork_beam)
+agv_fork_structure.add_beam(n8, n9, fork_beam)
+agv_fork_structure.add_beam(n9, n10, fork_beam)
+# agv_fork_structure.add_beam(n8, n3, fork_beam)
+agv_fork_structure.add_beam(n5, n10, fork_beam)
 
 # Add spring
 k_spring = 6 # N/mm
@@ -73,10 +73,10 @@ visualize_structure(agv_fork_structure, U, scale = 10)
 # # plot_bending_shear_diagrams(agv_fork_structure, U)
 # animate_deformation(agv_fork_structure, U, scale = 10)
 
-calculate_stress(agv_fork_structure, U, h, b)
+calculate_stress(agv_fork_structure, U)
 
-plot_stress_distribution(agv_fork_structure, U, h, b, stress_component = "sigma_axial")
-plot_stress_distribution(agv_fork_structure, U, h, b, stress_component = "sigma_bending_y")
-plot_stress_distribution(agv_fork_structure, U, h, b, stress_component = "sigma_bending_z")
-plot_stress_distribution(agv_fork_structure, U, h, b, stress_component = "tau_torsion")
-plot_stress_distribution(agv_fork_structure, U, h, b, stress_component = "sigma_total")
+plot_stress_distribution(agv_fork_structure, U, stress_component = "sigma_axial")
+plot_stress_distribution(agv_fork_structure, U, stress_component = "sigma_bending_y")
+plot_stress_distribution(agv_fork_structure, U, stress_component = "sigma_bending_z")
+plot_stress_distribution(agv_fork_structure, U, stress_component = "tau_torsion")
+plot_stress_distribution(agv_fork_structure, U, stress_component = "sigma_total")

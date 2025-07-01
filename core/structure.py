@@ -1,6 +1,6 @@
-from node import Node
-from beam import BeamElement3D
-from spring_element import SpringElement3D
+from core.node import Node
+from core.beam import BeamElement3D
+from core.spring_element import SpringElement3D
 import numpy as np
 
 class Structure:

@@ -1,10 +1,10 @@
-from structure import Structure
-from beamProperties import BeamProperties
+from core.structure import Structure
+from core.beamProperties import BeamProperties
 import numpy as np
-from visualise_structure import visualize_structure
-from evaluate_stress import calculate_stress
-from export_nodal_diaplacements import export_nodal_displacements
-from visualise_stress import plot_stress_distribution
+from core.visualise_structure import visualize_structure
+from core.evaluate_stress import calculate_stress
+from core.export_nodal_diaplacements import export_nodal_displacements
+from core.visualise_stress import plot_stress_distribution
 
 # Fork Cross-Section
 E = 210e3  # MPa (Young's modulus)
