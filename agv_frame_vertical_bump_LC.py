@@ -192,8 +192,7 @@ agv_frame.add_beam(n48, n52, fork_pivot)
 
 # Add spring elements
 k_spring = 6 # N/mm
-spring_vector = np.zeros(12)
-spring_vector[2] = k_spring  # UZ of node1 (index 2 of first 6 DOFs)
+spring_vector = [0, k_spring, 0, 0, 0, 0]
 
 agv_frame.add_spring(n2, n4, spring_vector)
 agv_frame.add_spring(n7, n9, spring_vector)

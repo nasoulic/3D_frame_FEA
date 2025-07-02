@@ -1,6 +1,6 @@
 from core.structure import Structure
 from core.beamProperties import BeamProperties
-import numpy as np
+import matplotlib.pyplot as plt
 from core.visualise_structure import visualize_structure
 from core.evaluate_stress import calculate_stress
 from core.export_nodal_diaplacements import export_nodal_displacements
@@ -49,8 +49,7 @@ agv_fork_structure.add_beam(n5, n10, fork_beam)
 
 # Add spring
 k_spring = 6 # N/mm
-spring_vector = np.zeros(12)
-spring_vector[2] = k_spring  # UZ of node1 (index 2 of first 6 DOFs)
+spring_vector = [0, k_spring, 0, 0, 0, 0]
 
 agv_fork_structure.add_spring(n2, n4, spring_vector)
 agv_fork_structure.add_spring(n7, n9, spring_vector)
@@ -80,3 +79,5 @@ plot_stress_distribution(agv_fork_structure, U, stress_component = "sigma_bendin
 plot_stress_distribution(agv_fork_structure, U, stress_component = "sigma_bending_z")
 plot_stress_distribution(agv_fork_structure, U, stress_component = "tau_torsion")
 plot_stress_distribution(agv_fork_structure, U, stress_component = "sigma_total")
+
+plt.show()
