@@ -237,7 +237,7 @@ export_nodal_displacements(agv_frame, U, "nodal_displacement_verticalBump.dat")
 calculate_stress(agv_frame, U, "stresses_output_verticalBump.dat")
 
 # Visualise results
-visualize_structure(agv_frame, U, scale = 2)
+visualize_structure(agv_frame, U, scale = 2, name = "verticalBump")
 
 plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_verticalBump.png")
 plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_verticalBump.png")

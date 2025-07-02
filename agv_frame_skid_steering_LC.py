@@ -241,7 +241,7 @@ export_nodal_displacements(agv_frame, U, "nodal_displacement_skidSteering.dat")
 calculate_stress(agv_frame, U, "stresses_output_skidSteering.dat")
 
 # Visualise results
-visualize_structure(agv_frame, U, scale = 10)
+visualize_structure(agv_frame, U, scale = 10, name = "skidSteering")
 
 plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_skidSteering.png")
 plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_skidSteering.png")
