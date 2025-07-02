@@ -1,6 +1,7 @@
+import os
+from core.report_generator import EngineeringReportGenerator
 from core.structure import Structure
 from core.beamProperties import BeamProperties
-import numpy as np
 import matplotlib.pyplot as plt
 from core.visualise_structure import visualize_structure
 from core.evaluate_stress import calculate_stress
@@ -18,6 +19,7 @@ Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
 fork_beams = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork")
+fork_beams.export_data()
 
 # Fork Pivot Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -30,6 +32,7 @@ Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
 fork_pivot = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork_pivot")
+fork_pivot.export_data()
 
 # Fork 2 Frame Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -42,6 +45,7 @@ Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
 fork_to_frame = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork_to_frame")
+fork_to_frame.export_data()
 
 # Frame Beam Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -54,6 +58,7 @@ Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
 frame_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "frame")
+frame_beam.export_data()
 
 # Frame Traverse Beam Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -66,6 +71,7 @@ Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
 frame_traverse_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "frame_traverse")
+frame_traverse_beam.export_data()
 
 # Create frame structure
 agv_frame = Structure()
@@ -231,16 +237,14 @@ agv_frame.add_load(n54.id, [-230, 0, -460, 0, 0, 0]) # Rear Right Wheel
 U = agv_frame.solve()
 
 # Write result files
-export_nodal_displacements(agv_frame, U, "nodal_displacement_skid_steering.dat")
-calculate_stress(agv_frame, U, "stresses_output_skid_steering.dat")
+export_nodal_displacements(agv_frame, U, "nodal_displacement_skidSteering.dat")
+calculate_stress(agv_frame, U, "stresses_output_skidSteering.dat")
 
 # Visualise results
 visualize_structure(agv_frame, U, scale = 10)
 
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_z", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "tau_torsion", filename = "stress_skid_steering.png")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_total", filename = "stress_skid_steering.png")
-
-plt.show()
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_skidSteering.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_skidSteering.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_z", filename = "stress_skidSteering.png")
+plot_stress_distribution(agv_frame, U, stress_component = "tau_torsion", filename = "stress_skidSteering.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_total", filename = "stress_skidSteering.png")
