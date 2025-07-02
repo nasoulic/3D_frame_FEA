@@ -3,7 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 def visualize_structure(structure, displacements=None, show_forces=True, show_supports=True,
-                        show_internal_forces=False, scale=1.0):
+                        show_internal_forces=False, scale=1.0, name = None):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
@@ -157,3 +157,4 @@ def visualize_structure(structure, displacements=None, show_forces=True, show_su
     ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
 
     plt.tight_layout()
+    plt.savefig('{0}_{1}.png'.format("displacement_visualisation",  name))
