@@ -205,14 +205,18 @@ agv_frame.add_spring(n47, n49, spring_vector)
 agv_frame.add_spring(n51, n53, spring_vector)
 
 # Apply constraints for assymetric bump
-agv_frame.add_support(n1.id, [0]) # Constrain x
-agv_frame.add_support(n6.id, [0]) # Constrain x
-agv_frame.add_support(n23.id, [0, 1, 2]) # Constrain xyz
-agv_frame.add_support(n27.id, [0, 1, 2]) # Constrain xyz
+
+# n1 & n6 Front Left Wheel
+# n39 & n43 Front Right Wheel
+# n23 & n27 Real Left Wheel
+# n50 & n54 Rear Right Wheel
+
+agv_frame.add_support(n23.id, [1]) # Constrain y
+agv_frame.add_support(n27.id, [1]) # Constrain y
 agv_frame.add_support(n39.id, [1, 2]) # Constrain yz
 agv_frame.add_support(n43.id, [1, 2]) # Constrain yz
-agv_frame.add_support(n50.id, [1]) # Constrain y
-agv_frame.add_support(n54.id, [1]) # Constrain y
+agv_frame.add_support(n50.id, [0, 1, 2]) # Constrain xyz
+agv_frame.add_support(n54.id, [0, 1, 2]) # Constrain xyz
 
 # Apply loadcases
 agv_frame.add_load(n1.id, [0, 2000, 0, 0, 0, 0]) # Front Left Wheel
@@ -229,7 +233,7 @@ export_nodal_displacements(agv_frame, U, "nodal_displacement_vertical_bump.dat")
 calculate_stress(agv_frame, U, "stresses_output_vertical_bump.dat")
 
 # Visualise results
-visualize_structure(agv_frame, U, scale = 1)
+visualize_structure(agv_frame, U, scale = 2)
 
 plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_vertical_bump.png")
 plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_vertical_bump.png")
