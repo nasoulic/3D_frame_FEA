@@ -17,7 +17,7 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-fork_beams = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+fork_beams = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork")
 
 # Fork Pivot Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -29,7 +29,7 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-fork_pivot = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+fork_pivot = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork_pivot")
 
 # Fork 2 Frame Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -41,7 +41,7 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-fork_to_frame = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+fork_to_frame = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork_to_frame")
 
 # Frame Beam Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -53,7 +53,7 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-frame_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+frame_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "frame")
 
 # Frame Traverse Beam Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -65,7 +65,7 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-frame_traverse_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+frame_traverse_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "frame_traverse")
 
 # Create frame structure
 agv_frame = Structure()

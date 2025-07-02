@@ -18,7 +18,7 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-fork_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+fork_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork")
 
 # Create structure
 agv_fork_structure = Structure()

@@ -24,5 +24,6 @@ def calculate_stress(structure, U, filename="stresses_output.dat"):
             stresses = element.compute_stresses(f_local, c_y, c_z, c_t)
 
             f.write(f"\nStresses at element {i+1}:\n")
+            f.write("Element group: {0}\n".format(element.name))
             for key, value in stresses.items():
                 f.write(f"{key}: {value:.3e} MPa\n")
