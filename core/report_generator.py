@@ -107,8 +107,7 @@ class EngineeringReportGenerator:
         doc.add_paragraph(f"Figure: {image_name}", style='Caption')
 
     def add_properties_table(self, doc, filepath, name):
-        doc.add_heading(f"Properties: {name}", level=2)
-
+        doc.add_heading(f"{name}", level=2)
         table = doc.add_table(rows=1, cols=3)
         hdr = table.rows[0].cells
         hdr[0].paragraphs[0].add_run("Property").bold = True
@@ -230,13 +229,37 @@ class EngineeringReportGenerator:
                         el["sigma_bending_z"] ** 2 + 3 * el["tau_torsion"] ** 2)
             el["vonMises"] = vm
 
-
     def generate(self):
         self.collect_files()
         doc = Document()
         doc.add_heading("Engineering Report", 0)
 
+        # Add table of contents
+        paragraph = doc.add_paragraph()
+        run = paragraph.add_run()
+        fldChar = OxmlElement('w:fldChar')
+        fldChar.set(qn('w:fldCharType'), 'begin')
+
+        instrText = OxmlElement('w:instrText')
+        instrText.set(qn('xml:space'), 'preserve')
+        instrText.text = 'TOC \\o "1-3" \\h \\z \\u'
+
+        fldChar2 = OxmlElement('w:fldChar')
+        fldChar2.set(qn('w:fldCharType'), 'separate')
+
+        fldChar3 = OxmlElement('w:fldChar')
+        fldChar3.set(qn('w:fldCharType'), 'end')
+
+        r_element = run._r
+        r_element.append(fldChar)
+        r_element.append(instrText)
+        r_element.append(fldChar2)
+        r_element.append(fldChar3)
+
+        doc.add_page_break()
+
         # Properties sections
+        doc.add_heading(f" Beam Properties", level=1)
         for name, file in self.properties_files.items():
             self.add_properties_table(doc, file, name)
 
@@ -265,6 +288,26 @@ class EngineeringReportGenerator:
                 self.add_max_displacement_summary(doc, nodes)
                 self.add_nodal_displacement_table(doc, nodes)
 
+        section = doc.sections[0]
+        footer = section.footer
+        paragraph = footer.paragraphs[0]
+        paragraph.alignment = 1  # center
+
+        run = paragraph.add_run()
+        fldChar1 = OxmlElement('w:fldChar')
+        fldChar1.set(qn('w:fldCharType'), 'begin')
+
+        instrText = OxmlElement('w:instrText')
+        instrText.set(qn('xml:space'), 'preserve')
+        instrText.text = "PAGE"
+
+        fldChar2 = OxmlElement('w:fldChar')
+        fldChar2.set(qn('w:fldCharType'), 'end')
+
+        run._r.append(fldChar1)
+        run._r.append(instrText)
+        run._r.append(fldChar2)
+        
         docx_path = f"{self.output_name}.docx"
         doc.save(docx_path)
         # convert(docx_path, f"{self.output_name}.pdf")
