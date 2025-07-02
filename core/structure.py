@@ -1,6 +1,9 @@
 from core.node import Node
 from core.beam import BeamElement3D
 from core.spring_element import SpringElement3D
+from core.RBE2 import RBE2Element
+from core.RBE3 import RBE3Element
+from core.RigidElement import RigidElement
 import numpy as np
 
 class Structure:
@@ -8,6 +11,9 @@ class Structure:
         self.nodes = []
         self.elements = []
         self.spring_elements = []
+        self.rbe2_elements = []
+        self.rbe3_elements = []
+        self.rigid_elements = []
         self.loads = {}       # node_id: [Fx, Fy, Fz, Mx, My, Mz]
         self.supports = {}    # node_id: [fixed_dofs]
 
@@ -24,6 +30,18 @@ class Structure:
     def add_spring(self, node1, node2, stiffness_vector):
         spring = SpringElement3D(node1, node2, stiffness_vector)
         self.spring_elements.append(spring)
+
+    def add_rbe2(self, master_node, slave_nodes):
+        rbe2 = RBE2Element(master_node, slave_nodes)
+        self.rbe2_elements.append(rbe2)
+
+    def add_rbe3(self, master_node, slave_nodes, weights = None):
+        rbe3 = RBE3Element(master_node, slave_nodes, weights)
+        self.rbe3_elements.append(rbe3)
+
+    def add_rigid(self, node1, node2):
+        rigid = RigidElement(node1, node2)
+        self.rigid_elements.append(rigid)
 
     def add_support(self, node_id, fixed_dofs):
         self.supports[node_id] = fixed_dofs
@@ -59,8 +77,43 @@ class Structure:
 
     def apply_boundary_conditions(self, K, F):
         constrained_dofs = []
+
+        # Standard supports
         for nid, dofs in self.supports.items():
             constrained_dofs.extend([6 * nid + dof for dof in dofs])
+
+        # --- Add RBE2 constraints ---
+        for rbe2 in self.rbe2_elements:
+            constraints = rbe2.assemble_constraint_matrix()
+            for master_dof, slave_dof in constraints:
+                # Constrain slave_dof equal to master_dof
+                K[slave_dof, :] = 0.0
+                K[:, slave_dof] = 0.0
+                K[slave_dof, slave_dof] = 1.0
+                F[slave_dof] = 0.0
+
+                K[slave_dof, master_dof] = -1.0
+                K[master_dof, slave_dof] = -1.0
+
+        # --- Add RBE3 constraints ---
+        for rbe3 in self.rbe3_elements:
+            constraints = rbe3.assemble_constraint_matrix()
+            for master_dof, slave_info in constraints:
+                for slave_dof, weight in slave_info:
+                    K[master_dof, slave_dof] += -weight
+                    K[slave_dof, master_dof] += -weight
+
+        # --- Add Rigid elements constraints ---
+        for rigid in self.rigid_elements:
+            constraints = rigid.assemble_constraint_matrix()
+            for dof1, dof2 in constraints:
+                K[dof1, :] = 0.0
+                K[:, dof1] = 0.0
+                K[dof1, dof1] = 1.0
+                F[dof1] = 0.0
+
+                K[dof1, dof2] = -1.0
+                K[dof2, dof1] = -1.0
 
         free_dofs = list(set(range(K.shape[0])) - set(constrained_dofs))
 

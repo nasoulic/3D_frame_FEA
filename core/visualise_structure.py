@@ -69,6 +69,44 @@ def visualize_structure(structure, displacements=None, show_forces=True, show_su
 
             ax.plot(xd, yd, zd, color='magenta', linestyle=':', linewidth=1)
 
+    # --- RBE2 elements ---
+    for rbe2 in structure.rbe2_elements:
+        master = rbe2.master_node
+
+        # Plot master node
+        ax.scatter(master.coords[0], master.coords[2], master.coords[1],
+                color='green', s=80, marker='o', label='RBE2 Master')
+
+        for slave in rbe2.slave_nodes:
+            # Plot slave node
+            ax.scatter(slave.coords[0], slave.coords[2], slave.coords[1],
+                    color='yellow', s=40, marker='^', label='RBE2 Slave')
+
+            # Line between master and slave
+            x = [master.coords[0], slave.coords[0]]
+            y = [master.coords[2], slave.coords[2]]
+            z = [master.coords[1], slave.coords[1]]
+            ax.plot(x, y, z, color='green', linestyle='-', linewidth=1)
+
+    # --- RBE3 elements ---
+    for rbe3 in structure.rbe3_elements:
+        master = rbe3.master_node
+        for slave in rbe3.slave_nodes:
+            x = [master.coords[0], slave.coords[0]]
+            y = [master.coords[2], slave.coords[2]]
+            z = [master.coords[1], slave.coords[1]]
+            ax.plot(x, y, z, color='orange', linestyle='--', linewidth=1)
+
+    # --- Rigid elements ---
+    for rigid in structure.rigid_elements:
+        n1 = rigid.node1
+        n2 = rigid.node2
+        x = [n1.coords[0], n2.coords[0]]
+        y = [n1.coords[2], n2.coords[2]]
+        z = [n1.coords[1], n2.coords[1]]
+        ax.plot(x, y, z, color='purple', linestyle='-.', linewidth=1)
+
+
     # --- Loads ---
     if show_forces:
         for nid, load in structure.loads.items():
