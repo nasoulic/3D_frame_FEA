@@ -1,7 +1,5 @@
 from core.structure import Structure
 from core.beamProperties import BeamProperties
-import numpy as np
-import matplotlib.pyplot as plt
 from core.visualise_structure import visualize_structure
 from core.evaluate_stress import calculate_stress
 from core.export_nodal_diaplacements import export_nodal_displacements
@@ -10,8 +8,8 @@ from core.visualise_stress import plot_stress_distribution
 # Fork Cross-Section
 E = 210e3  # MPa (Young's modulus)
 G = 81.2e3  # MPa (Shear modulus)
-b = 35 # mm
-h = 35 # mm
+b = 40 # mm
+h = 40 # mm
 t = 3 # mm
 A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
@@ -23,9 +21,9 @@ fork_beams.export_data()
 # Fork Pivot Cross-Section
 E = 210e3  # MPa (Young's modulus)
 G = 81.2e3  # MPa (Shear modulus)
-b = 25 # mm
-h = 25 # mm
-t = 3 # mm
+b = 35 # mm
+h = 35 # mm
+t = 2.5 # mm
 A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
@@ -36,9 +34,9 @@ fork_pivot.export_data()
 # Fork 2 Frame Cross-Section
 E = 210e3  # MPa (Young's modulus)
 G = 81.2e3  # MPa (Shear modulus)
-b = 40 # mm
-h = 40 # mm
-t = 3 # mm
+b = 50 # mm
+h = 50 # mm
+t = 2.5 # mm
 A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
