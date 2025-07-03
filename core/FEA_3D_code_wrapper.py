@@ -1,5 +1,4 @@
 import os
-import matplotlib.pyplot as plt
 from core.structure import Structure
 from core.beamProperties import BeamProperties
 from core.visualise_structure import visualize_structure
@@ -268,7 +267,7 @@ class FEA_wrapper():
         plot_stress_distribution(self.frameStructure, self.U, stress_component = "sigma_bending_z", filename = "stress_{0}.png".format(name))
         plot_stress_distribution(self.frameStructure, self.U, stress_component = "tau_torsion", filename = "stress_{0}.png".format(name))
         plot_stress_distribution(self.frameStructure, self.U, stress_component = "sigma_total", filename = "stress_{0}.png".format(name))
-        plt.close()
+        
 
     def createReport(self):
 

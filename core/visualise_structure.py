@@ -158,3 +158,4 @@ def visualize_structure(structure, displacements=None, show_forces=True, show_su
 
     plt.tight_layout()
     plt.savefig('{0}_{1}.png'.format("displacement_visualisation",  name))
+    plt.close()

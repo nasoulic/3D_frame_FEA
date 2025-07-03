@@ -78,3 +78,4 @@ def plot_stress_distribution(structure, U, stress_component='axial', scale=1.0, 
 
     plt.tight_layout()
     plt.savefig(f"{stress_component}_{filename}")
+    plt.close()
