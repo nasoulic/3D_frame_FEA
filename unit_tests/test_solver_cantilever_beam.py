@@ -1,25 +1,21 @@
 import unittest
 import numpy as np
-from beam import BeamElement3D
-from node import Node
-from structure import Structure
+from core.beam import BeamElement3D
+from core.beamProperties import BeamProperties
+from core.node import Node
+from core.structure import Structure
 
 class TestBeamElement3D(unittest.TestCase):
 
     def setUp(self):
         # Beam properties
-        self.E = 210e9
-        self.G = 81e9
-        self.A = 0.003
-        self.Iy = 5.2e-6
-        self.Iz = 5.2e-6
-        self.J = 1.0e-5
+        beamProp = BeamProperties(210e9, 81e9, 0.003, 5.2e-7, 5.2e-7, 1.0e-6)
 
         # Simple horizontal beam, 2m span
         self.node1 = Node(0, 0, 0, 0)
         self.node2 = Node(1, 0, 0, 2.0)
 
-        self.beam = BeamElement3D(self.node1, self.node2, self.E, self.G, self.A, self.Iy, self.Iz, self.J)
+        self.beam = BeamElement3D(self.node1, self.node2, beamProp)
 
     def test_length_and_direction(self):
         self.assertAlmostEqual(self.beam.length, 2.0)
@@ -40,18 +36,13 @@ class TestStructureSolve(unittest.TestCase):
         self.structure = Structure()
 
         # Beam properties
-        E = 210e9
-        G = 81e9
-        A = 0.0025
-        Iy = 5.21e-7
-        Iz = 5.21e-7
-        J = 1.04e-6
+        beamProp = BeamProperties(210e9, 81e9, 0.003, 5.2e-7, 5.2e-7, 1.0e-6)
 
         # Create nodes
         n0 = self.structure.add_node(0, 0, 0)
         n1 = self.structure.add_node(2.0, 0, 0)
 
-        self.structure.add_beam(n0, n1, E, G, A, Iy, Iz, J)
+        self.structure.add_beam(n0, n1, beamProp)
 
         # Cantilever support at node 0
         self.structure.add_support(0, [0, 1, 2, 3, 4, 5])

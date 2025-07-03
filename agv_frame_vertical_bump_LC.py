@@ -1,36 +1,11 @@
-from structure import Structure
-from beamProperties import BeamProperties
-import numpy as np
-from visualise_structure import visualize_structure
-from evaluate_stress import calculate_stress
-from export_nodal_diaplacements import export_nodal_displacements
-from visualise_stress import plot_stress_distribution
+from core.structure import Structure
+from core.beamProperties import BeamProperties
+from core.visualise_structure import visualize_structure
+from core.evaluate_stress import calculate_stress
+from core.export_nodal_diaplacements import export_nodal_displacements
+from core.visualise_stress import plot_stress_distribution
 
 # Fork Cross-Section
-E = 210e3  # MPa (Young's modulus)
-G = 81.2e3  # MPa (Shear modulus)
-b = 35 # mm
-h = 35 # mm
-t = 3 # mm
-A = b*h - (h-2*t)*(b-2*t) # m2
-Iy = b*h**3/12 # m4
-Iz = b**3*h/12 # m4
-
-fork_beams = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
-
-# Fork Pivot Cross-Section
-E = 210e3  # MPa (Young's modulus)
-G = 81.2e3  # MPa (Shear modulus)
-b = 25 # mm
-h = 25 # mm
-t = 3 # mm
-A = b*h - (h-2*t)*(b-2*t) # m2
-Iy = b*h**3/12 # m4
-Iz = b**3*h/12 # m4
-
-fork_pivot = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
-
-# Fork 2 Frame Cross-Section
 E = 210e3  # MPa (Young's modulus)
 G = 81.2e3  # MPa (Shear modulus)
 b = 40 # mm
@@ -40,7 +15,34 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-fork_to_frame = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+fork_beams = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork")
+fork_beams.export_data()
+
+# Fork Pivot Cross-Section
+E = 210e3  # MPa (Young's modulus)
+G = 81.2e3  # MPa (Shear modulus)
+b = 35 # mm
+h = 35 # mm
+t = 2.5 # mm
+A = b*h - (h-2*t)*(b-2*t) # m2
+Iy = b*h**3/12 # m4
+Iz = b**3*h/12 # m4
+
+fork_pivot = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork_pivot")
+fork_pivot.export_data()
+
+# Fork 2 Frame Cross-Section
+E = 210e3  # MPa (Young's modulus)
+G = 81.2e3  # MPa (Shear modulus)
+b = 50 # mm
+h = 50 # mm
+t = 2.5 # mm
+A = b*h - (h-2*t)*(b-2*t) # m2
+Iy = b*h**3/12 # m4
+Iz = b**3*h/12 # m4
+
+fork_to_frame = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "fork_to_frame")
+fork_to_frame.export_data()
 
 # Frame Beam Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -52,7 +54,8 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-frame_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+frame_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "frame")
+frame_beam.export_data()
 
 # Frame Traverse Beam Cross-Section
 E = 210e3  # MPa (Young's modulus)
@@ -64,7 +67,8 @@ A = b*h - (h-2*t)*(b-2*t) # m2
 Iy = b*h**3/12 # m4
 Iz = b**3*h/12 # m4
 
-frame_traverse_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t)
+frame_traverse_beam = BeamProperties(E, G, A, Iy, Iz, b, h, t = t, name = "frame_traverse")
+frame_traverse_beam.export_data()
 
 # Create frame structure
 agv_frame = Structure()
@@ -191,8 +195,7 @@ agv_frame.add_beam(n48, n52, fork_pivot)
 
 # Add spring elements
 k_spring = 6 # N/mm
-spring_vector = np.zeros(12)
-spring_vector[2] = k_spring  # UZ of node1 (index 2 of first 6 DOFs)
+spring_vector = [0, k_spring, 0, 0, 0, 0]
 
 agv_frame.add_spring(n2, n4, spring_vector)
 agv_frame.add_spring(n7, n9, spring_vector)
@@ -203,28 +206,23 @@ agv_frame.add_spring(n44, n46, spring_vector)
 agv_frame.add_spring(n47, n49, spring_vector)
 agv_frame.add_spring(n51, n53, spring_vector)
 
-# Apply constraints for skid steering
-wheel_nodes = [n1, n6, n23, n27, n39, n43, n50, n54]
+# Apply constraints for assymetric bump
 
-for nd in wheel_nodes:
-    agv_frame.add_support(nd.id, [1]) # Constrain vertical movement
+# n1 & n6 Front Left Wheel
+# n39 & n43 Front Right Wheel
+# n23 & n27 Real Left Wheel
+# n50 & n54 Rear Right Wheel
 
-agv_frame.add_support(n1.id, [0]) # Constrain x
-agv_frame.add_support(n6.id, [0]) # Constrain x
-agv_frame.add_support(n39.id, [2]) # Constrain z
-agv_frame.add_support(n43.id, [2]) # Constrain z
-agv_frame.add_support(n23.id, [0, 2]) # Constrain xz
-agv_frame.add_support(n27.id, [0, 2]) # Constrain xz
+agv_frame.add_support(n23.id, [1]) # Constrain y
+agv_frame.add_support(n27.id, [1]) # Constrain y
+agv_frame.add_support(n39.id, [1, 2]) # Constrain yz
+agv_frame.add_support(n43.id, [1, 2]) # Constrain yz
+agv_frame.add_support(n50.id, [0, 1, 2]) # Constrain xyz
+agv_frame.add_support(n54.id, [0, 1, 2]) # Constrain xyz
 
 # Apply loadcases
-agv_frame.add_load(n1.id, [230, 0, 644, 0, 0, 0]) # Front Left Wheel
-agv_frame.add_load(n6.id, [230, 0, 644, 0, 0, 0]) # Front Left Wheel
-agv_frame.add_load(n39.id, [-230, 0, 243, 0, 0, 0]) # Front Right Wheel
-agv_frame.add_load(n43.id, [-230, 0, 243, 0, 0, 0]) # Front Right Wheel
-agv_frame.add_load(n23.id, [230, 0, -861, 0, 0, 0]) # Rear Left Wheel
-agv_frame.add_load(n27.id, [230, 0, -861, 0, 0, 0]) # Rear Left Wheel
-agv_frame.add_load(n50.id, [-230, 0, -460, 0, 0, 0]) # Rear Right Wheel
-agv_frame.add_load(n54.id, [-230, 0, -460, 0, 0, 0]) # Rear Right Wheel
+agv_frame.add_load(n1.id, [0, 2000, 0, 0, 0, 0]) # Front Left Wheel
+agv_frame.add_load(n6.id, [0, 2000, 0, 0, 0, 0]) # Front Left Wheel
 
 # Visualise frame
 # visualize_structure(agv_frame)
@@ -233,14 +231,14 @@ agv_frame.add_load(n54.id, [-230, 0, -460, 0, 0, 0]) # Rear Right Wheel
 U = agv_frame.solve()
 
 # Write result files
-export_nodal_displacements(agv_frame, U)
-calculate_stress(agv_frame, U)
+export_nodal_displacements(agv_frame, U, "nodal_displacement_verticalBump.dat")
+calculate_stress(agv_frame, U, "stresses_output_verticalBump.dat")
 
 # Visualise results
-visualize_structure(agv_frame, U, scale = 10)
+visualize_structure(agv_frame, U, scale = 2, name = "verticalBump")
 
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_z")
-plot_stress_distribution(agv_frame, U, stress_component = "tau_torsion")
-plot_stress_distribution(agv_frame, U, stress_component = "sigma_total")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_axial", filename = "stress_verticalBump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_y", filename = "stress_verticalBump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_bending_z", filename = "stress_verticalBump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "tau_torsion", filename = "stress_verticalBump.png")
+plot_stress_distribution(agv_frame, U, stress_component = "sigma_total", filename = "stress_verticalBump.png")

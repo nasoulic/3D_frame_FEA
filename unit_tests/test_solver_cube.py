@@ -1,6 +1,7 @@
 import unittest
 import numpy as np
-from structure import Structure  
+from core.structure import Structure  
+from core.beamProperties import BeamProperties
 
 class TestCubeStructure(unittest.TestCase):
 
@@ -8,12 +9,7 @@ class TestCubeStructure(unittest.TestCase):
         self.structure = Structure()
 
         # Material and cross-section
-        E = 210e9  # Pa
-        G = 80e9   # Pa
-        A = 5e-4   # m^2
-        Iy = 1e-6  # m^4
-        Iz = 1e-6  # m^4
-        J = 2e-6   # m^4
+        beamProp = BeamProperties(210e9, 80e9, 5e-4, 1e-6, 1e-6, 2e-6)
 
         # Create cube nodes (8 corners)
         coords = [
@@ -30,7 +26,7 @@ class TestCubeStructure(unittest.TestCase):
         ]
 
         for i, j in edges:
-            self.structure.add_beam(self.nodes[i], self.nodes[j], E, G, A, Iy, Iz, J)
+            self.structure.add_beam(self.nodes[i], self.nodes[j], beamProp)
 
         # Supports: fix all 6 DOFs of bottom nodes
         for nid in [0, 1, 2, 3]:
@@ -39,7 +35,7 @@ class TestCubeStructure(unittest.TestCase):
         # Apply vertical load on top center node (between nodes 4–7)
         center_z_node = self.structure.add_node(0.5, 0.5, 1.0)
         for i in [4, 5, 6, 7]:
-            self.structure.add_beam(self.nodes[i], center_z_node, E, G, A, Iy, Iz, J)
+            self.structure.add_beam(self.nodes[i], center_z_node, beamProp)
         self.structure.add_load(center_z_node.id, [0, 0, -1000.0, 0, 0, 0])
 
         self.center_node = center_z_node

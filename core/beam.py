@@ -15,6 +15,7 @@ class BeamElement3D:
         self.h = beam_properties.h      # Beam height
         self.r = beam_properties.r      # Beam radius
         self.t = beam_properties.t      # Beam thickness
+        self.name = beam_properties.name # Beam group name
 
         self.length, self.direction_cosines = self._compute_geometry()
         self.k_local = self._compute_local_stiffness()
