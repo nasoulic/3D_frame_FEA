@@ -1,4 +1,5 @@
 import os
+import matplotlib.pyplot as plt
 from core.structure import Structure
 from core.beamProperties import BeamProperties
 from core.visualise_structure import visualize_structure
@@ -15,6 +16,12 @@ class FEA_wrapper():
 
     def getBeamPropertyByName(self, name):
         return next((item for item in self.beamPropertiesList if item.name == name))
+    
+    def clearBCs(self, lists = []):
+        self.frameStructure.loads.clear()
+        self.frameStructure.supports.clear()
+        for mylist in lists:
+            mylist.clear()
 
     def defineBeamProperty(self, E, G, A, Iy, Iz, b = None, h = None, r = None, t = None, name = None):
         
@@ -236,10 +243,12 @@ class FEA_wrapper():
                                        self.frameStructure.getNodeById(52), spring_vector)
 
     def addConstraints(self, nodes, spcs):
+
         for node, spc in zip(nodes, spcs):
             self.frameStructure.add_support(node.id, spc)
 
     def addLoads(self, nodes, loads):
+
         for node, load in zip(nodes, loads):
             self.frameStructure.add_load(node.id, load)
 
@@ -247,6 +256,10 @@ class FEA_wrapper():
         self.U = self.frameStructure.solve()
 
     def exportResults(self, name, scale = 2):
+
+        for beam in self.beamPropertiesList:
+            beam.export_data()
+
         export_nodal_displacements(self.frameStructure, self.U, "nodal_displacement_{0}.dat".format(name))
         calculate_stress(self.frameStructure, self.U, "stresses_output_{0}.dat".format(name))
         visualize_structure(self.frameStructure, self.U, scale = scale, name = name)
@@ -255,8 +268,10 @@ class FEA_wrapper():
         plot_stress_distribution(self.frameStructure, self.U, stress_component = "sigma_bending_z", filename = "stress_{0}.png".format(name))
         plot_stress_distribution(self.frameStructure, self.U, stress_component = "tau_torsion", filename = "stress_{0}.png".format(name))
         plot_stress_distribution(self.frameStructure, self.U, stress_component = "sigma_total", filename = "stress_{0}.png".format(name))
+        plt.close()
 
     def createReport(self):
+
         gen = EngineeringReportGenerator(os.getcwd())
         gen.generate()
 
