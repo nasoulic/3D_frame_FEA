@@ -17,6 +17,9 @@ class Structure:
         self.loads = {}       # node_id: [Fx, Fy, Fz, Mx, My, Mz]
         self.supports = {}    # node_id: [fixed_dofs]
 
+    def getNodeById(self, id):
+        return next((item for item in self.nodes if item.id == id))
+
     def add_node(self, x, y, z):
         node_id = len(self.nodes)
         node = Node(node_id, x, y, z)
