@@ -1,4 +1,16 @@
 from core.FEA_3D_code_wrapper import FEA_wrapper
+import os 
+
+i = 0
+flag = True
+while flag:
+       if not os.path.exists("./res{0}".format(i)):
+              os.mkdir("./res{0}".format(i))
+              i += 1
+              flag = False
+       else:
+              i += 1
+os.chdir("./res{0}".format(i-1))
 
 berryOnAGV = FEA_wrapper()
 
