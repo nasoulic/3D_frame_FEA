@@ -116,27 +116,6 @@ berryOnAGV.exportResults("skidSteering")
 
 berryOnAGV.clearBCs([spc_nodes, constrained_dofs, lc_nodes, lcs])
 
-# Torsional Twist SPCs
-spc_nodes = [berryOnAGV.frameStructure.getNodeById(22), berryOnAGV.frameStructure.getNodeById(26), 
-            berryOnAGV.frameStructure.getNodeById(49), berryOnAGV.frameStructure.getNodeById(53)]
-    
-constrained_dofs = [[1, 3, 4, 5], [1, 3, 4, 5],
-                    [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]]
-
-lc_nodes = [berryOnAGV.frameStructure.getNodeById(0), berryOnAGV.frameStructure.getNodeById(5), 
-            berryOnAGV.frameStructure.getNodeById(38), berryOnAGV.frameStructure.getNodeById(42)]
-
-lcs = [[0, -500, 0, 0, 0, 0], [0, -500, 0, 0, 0, 0],
-       [0, 500, 0, 0, 0, 0], [0, 500, 0, 0, 0, 0]]
-
-berryOnAGV.addConstraints(spc_nodes, constrained_dofs)
-berryOnAGV.addLoads(lc_nodes, lcs)
-
-berryOnAGV.solve()
-berryOnAGV.exportResults("torsionalTest")
-
-berryOnAGV.clearBCs([spc_nodes, constrained_dofs, lc_nodes, lcs])
-
 # Vertical Bump SPCs
 spc_nodes = [berryOnAGV.frameStructure.getNodeById(22), berryOnAGV.frameStructure.getNodeById(26),
             berryOnAGV.frameStructure.getNodeById(38), berryOnAGV.frameStructure.getNodeById(42), 
@@ -155,6 +134,30 @@ berryOnAGV.addLoads(lc_nodes, lcs)
 
 berryOnAGV.solve()
 berryOnAGV.exportResults("verticalBump")
+
+berryOnAGV.clearBCs([spc_nodes, constrained_dofs, lc_nodes, lcs])
+
+# Torsional Twist SPCs
+berryOnAGV.frameStructure.spring_elements.clear()
+berryOnAGV.addSpringElements([0, 1e12, 0, 0, 0, 0])
+
+spc_nodes = [berryOnAGV.frameStructure.getNodeById(22), berryOnAGV.frameStructure.getNodeById(26), 
+            berryOnAGV.frameStructure.getNodeById(49), berryOnAGV.frameStructure.getNodeById(53)]
+    
+constrained_dofs = [[1, 3, 4, 5], [1, 3, 4, 5],
+                    [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]]
+
+lc_nodes = [berryOnAGV.frameStructure.getNodeById(0), berryOnAGV.frameStructure.getNodeById(5), 
+            berryOnAGV.frameStructure.getNodeById(38), berryOnAGV.frameStructure.getNodeById(42)]
+
+lcs = [[0, -500, 0, 0, 0, 0], [0, -500, 0, 0, 0, 0],
+       [0, 500, 0, 0, 0, 0], [0, 500, 0, 0, 0, 0]]
+
+berryOnAGV.addConstraints(spc_nodes, constrained_dofs)
+berryOnAGV.addLoads(lc_nodes, lcs)
+
+berryOnAGV.solve()
+berryOnAGV.exportResults("torsionalTest")
 
 berryOnAGV.clearBCs([spc_nodes, constrained_dofs, lc_nodes, lcs])
 

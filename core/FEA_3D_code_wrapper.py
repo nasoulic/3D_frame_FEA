@@ -342,7 +342,7 @@ if __name__ == "__main__":
     agv.loadFrameNodes()
     agv.loadFrameBeams()
     agv.addSpringElements([0, 6, 0, 0, 0, 0])
-
+    
     spc_nodes = [agv.frameStructure.getNodeById(22), agv.frameStructure.getNodeById(26), 
                  agv.frameStructure.getNodeById(49), agv.frameStructure.getNodeById(53)]
     

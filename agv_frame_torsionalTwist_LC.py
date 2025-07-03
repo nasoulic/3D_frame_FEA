@@ -194,7 +194,7 @@ agv_frame.add_beam(n53, n54, fork_beams)
 agv_frame.add_beam(n48, n52, fork_pivot)
 
 # Add spring elements
-k_spring = 6 # N/mm
+k_spring = 1e12 # N/mm
 spring_vector = [0, k_spring, 0, 0, 0, 0]
 
 agv_frame.add_spring(n2, n4, spring_vector)
